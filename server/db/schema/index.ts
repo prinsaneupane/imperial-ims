@@ -1,4 +1,3 @@
-
 import { sql } from 'drizzle-orm'
 import {
   pgTable,
@@ -58,12 +57,12 @@ export const products = pgTable('products', {
   priceYuan: numeric('price_yuan', {
     precision: 12,
     scale: 2,
-  }).notNull(),
+  }).notNull().default('0'),
 
   sellingPriceNpr: numeric('selling_price_npr', {
     precision: 12,
     scale: 2,
-  }).notNull(),
+  }).notNull().default('0'),
 
   importer: varchar('importer', {
     length: 200,
@@ -78,7 +77,7 @@ export const products = pgTable('products', {
   createdAt: timestamp('created_at')
     .defaultNow()
     .notNull(),
-}, (table) => [
+}, table => [
   unique('product_article_colour_size_unique').on(
     table.articleNumber,
     table.colour,
@@ -88,7 +87,7 @@ export const products = pgTable('products', {
     sql`${table.priceYuan} >= 0`),
   check('product_price_npr_positive',
     sql`${table.sellingPriceNpr} >= 0`),
-  
+
 ])
 
 // 3. WAREHOUSES
@@ -128,10 +127,6 @@ export const stockMovements = pgTable('stock_movements', {
     .notNull()
     .references(() => warehouses.id),
 
-  rackZone: varchar('rack_zone', {
-    length: 100,
-  }).notNull(),
-
   // IN, OUT, TRANSFER_IN, TRANSFER_OUT, ADJUSTMENT
   movementType: varchar('movement_type', {
     length: 30,
@@ -148,7 +143,7 @@ export const stockMovements = pgTable('stock_movements', {
   createdAt: timestamp('created_at')
     .defaultNow()
     .notNull(),
-}, (table) => [
+}, table => [
   index('stock_product_warehouse_idx').on(
     table.productId,
     table.warehouseId,

@@ -6,5 +6,11 @@ export default defineNuxtConfig({
 
   modules: [
     '@nuxt/icon',
+    '@nuxt/eslint',
   ],
+  eslint: {
+    config: {
+      stylistic: true,
+    },
+  },
 })

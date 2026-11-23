@@ -1,4 +1,3 @@
-
 import {
   categories,
   products,
@@ -8,29 +7,40 @@ import {
 export default defineNitroPlugin(() => {
   const registry = useAdminRegistry()
 
-registry.register(products, {
-  label: 'Add New Stock',
-  icon: 'i-lucide-package-plus',
-  order: 2,
+  registry.register(products, {
+    label: 'Products',
+    icon: 'i-lucide-package',
+    order: 2,
 
-  fields: [
-    {
-      name: 'picture',
-      type: 'image',
-      label: 'Product Picture',
+    // Stock must be received using the combined modal.
+    create: {
+      enabled: false,
     },
-  ],
-})
 
-   registry.register(categories, {
+    // Prevent accidental product deletion.
+    delete: {
+      enabled: true,
+    },
+
+    fields: [
+      {
+        name: 'picture',
+        type: 'image',
+        label: 'Product Picture',
+      },
+    ],
+  })
+
+  registry.register(categories, {
     label: 'Categories',
     icon: 'i-lucide-tags',
     order: 1,
   })
-  
+
   registry.register(warehouses, {
     label: 'Warehouses',
     icon: 'i-lucide-warehouse',
     order: 3,
+    labelColumnName: 'name',
   })
 })
